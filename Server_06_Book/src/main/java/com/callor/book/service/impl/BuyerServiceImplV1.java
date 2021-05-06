@@ -58,7 +58,7 @@ public class BuyerServiceImplV1 implements BuyerService{
 		// TODO 고객 이름으로 검색하기
 		
 		String sql = " SELECT * FROM tbl_buyer ";
-		sql += " WHERE bu_name LIKE '%' || ? || '%'";
+		sql += " WHERE bu_name LIKE '%' || ? || '%' ";
 		
 		PreparedStatement pStr = null;
 		

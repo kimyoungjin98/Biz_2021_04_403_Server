@@ -2,6 +2,8 @@ package com.callor.book.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -12,12 +14,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.callor.book.model.BookDTO;
 import com.callor.book.model.BookRentDTO;
 import com.callor.book.model.BookRentVO;
 import com.callor.book.model.BuyerDTO;
 import com.callor.book.service.BookRentService;
+import com.callor.book.service.BookService;
 import com.callor.book.service.BuyerService;
 import com.callor.book.service.impl.BookRentServiceImplV1;
+import com.callor.book.service.impl.BookServiceImplV1;
 import com.callor.book.service.impl.BuyerServiceImplV1;
 
 /*
@@ -33,11 +38,13 @@ public class BookRentController extends HttpServlet {
 
 	protected BookRentService brService;
 	protected BuyerService buService;
-
+	protected BookService bkService;
+	
 	public BookRentController() {
 
 		brService = new BookRentServiceImplV1(); // new . . . 추가하기
 		buService = new BuyerServiceImplV1();
+		bkService = new BookServiceImplV1();
 	}
 
 	@Override
@@ -93,7 +100,7 @@ public class BookRentController extends HttpServlet {
 				// Rendering을 하라
 				// wepapp/WEB-INF/views/book.jsp 파일을 읽어서 
 				// Java 코드로 변환하고, 실행할 준비를 하라
-				RequestDispatcher disp = app.getRequestDispatcher("/WEB-INF/views/book.jsp");
+				RequestDispatcher disp = app.getRequestDispatcher("/WEB-INF/views/orderinfo.jsp");
 
 				// Rendering 된 view 데이터를
 				// Web browser로 response 하라
@@ -118,7 +125,8 @@ public class BookRentController extends HttpServlet {
 			
 //			ServletContext app = req.getServletContext();
 			
-			RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/order.jsp");
+			RequestDispatcher disp 
+			= req.getRequestDispatcher("/WEB-INF/views/order.jsp");
 			
 			disp.forward(req, resp);
 
@@ -140,10 +148,15 @@ public class BookRentController extends HttpServlet {
 				}
 				System.out.println("=".repeat(50));
 				
-				ServletContext app = req.getServletContext();
+				// ServletContext를 생성하여 속성(변수)세팅하기
+//				ServletContext app = req.getServletContext();
+//				app.setAttribute("BUYERS", buList);
 				
-				app.setAttribute("BUYERS", buList);
+				// req 객체에 바로 세팅하기
+				req.setAttribute("BUYERS", buList);
 				
+				// page1.jsp 파일을 열고 BUYERS 변수와 함께
+				// Rendering을 하여 HTML 코드를 생성하라
 				RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/page1.jsp");
 				disp.forward(req, resp);
 				
@@ -153,20 +166,91 @@ public class BookRentController extends HttpServlet {
 		} else if(subPath.equals("/order/page2")){
 			
 			String bu_code = req.getParameter("bu_code");
+			
+			// bu_code 값에 해당하는 회원정보 추출
 			BuyerDTO buyerDTO = buService.findById(bu_code);
+			if(buyerDTO != null) {
+				// bu_code 값에 해당하는 회원정보가 있으면 
+				// Console에 출력
+				System.out.println(buyerDTO.toString());
+			}
+//			ServletContext app = req.getServletContext();
+//			app.setAttribute("BUYER", buyerDTO);
+
+			req.setAttribute("BUYER", buyerDTO);
 			
-			ServletContext app = req.getServletContext();
-			app.setAttribute("BUYER", buyerDTO);
-			
+			// BUYER에 담긴 회원정보를 page2.jsp에
+			// Rendering하여 보여라 
 			RequestDispatcher disp = req.getRequestDispatcher("/WEB-INF/views/page2.jsp");
 			
 			disp.forward(req, resp);
+			
+		} else if(subPath.equals("/order/insert")) {
+		
+			String bk_isbn = req.getParameter("bk_isbn");
+			String bu_code = req.getParameter("bu_code");
+			
+			// 대여일자값을 생성하기 위하여 
+			// 날짜 클래스와 날짜포맷클래스를 사용하여
+			// 대여일자 문자열 만들기
+			
+			// 현재 컴퓨터 시스템 날짜 가져오기
+			Date date = new Date( System.currentTimeMillis() );
+			
+			// 날짜 데이터를 문자열로 변환하기 위한 설정
+			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+			
+			// 날짜 데이터를 설정한 포맷대로 문자열로 변환
+			String sDate = sd.format(date);
+			System.out.println("대여일자 : " + sDate);
+			
+			// Insert를 수행하기 위해 
+			// VO를 만들고 web에서 전달받은 
+			// 도서 ISBN과 회원CODE를 Setting 
+			BookRentVO brVO = new BookRentVO();
+			brVO.setBr_isbn(bk_isbn);
+			brVO.setBr_bcode(bu_code);
+			brVO.setBr_sdate(sDate);
+			brVO.setBr_price(1000);
+			
+			int result = brService.insert(brVO);
+			if(result > 0) {
+				out.println("대여정보 추가 성공!");
+			} else {
+				out.println("대여정보 추가 실패");
+			}
+			out.close();
 			
 		}if (subPath.equals("/return")) {
 			// 반납하기
 			BookRentVO bookRentVO = new BookRentVO();
 			brService.update(bookRentVO);
 
+		} else if(subPath.equals("/order/book")){
+			
+			String bu_code = req.getParameter("bu_code");
+			String bk_title = req.getParameter("bk_title");
+			
+			if(bk_title == null || bk_title.equals("")) {
+				out.println("도서명을 입력하세요");
+				out.close();
+			} else {
+				
+				// 회원정보를 한번 더 조회
+				BuyerDTO buDTO = buService.findById(bu_code);
+				req.setAttribute("BUYER", buDTO);
+				
+				List<BookDTO> bookList = bkService.findByTitle(bk_title);
+				
+				req.setAttribute("BOOKS", bookList);
+				
+				// method chaining 방식으로 연속 호출하기
+				req.getRequestDispatcher("/WEB-INF/views/book.jsp")
+				.forward(req, resp);
+				
+				
+			}
+			
 		} else {
 			// 그만하기
 		}
