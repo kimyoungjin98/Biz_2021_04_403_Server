@@ -23,31 +23,6 @@ h1 {
 	padding:2rem;
 }
 
-nav{
-	
-	padding:15px;
-	padding:0px;
-	
-}
-
-ul{
-	margin:0px;
-	background-color: rgba(78, 196, 223, 1);
-}
-
-li{
-	display:inline-block;
-	list-style:none;
-	margin:0px;
-	padding:10px;
-	color:white;
-}
-
-li:hover{
-	
-	background-color: gray;
-	color:black;
-}
 
 table{
 	border-collapse: collapse;
