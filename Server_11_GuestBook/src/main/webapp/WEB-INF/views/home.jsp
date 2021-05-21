@@ -11,9 +11,17 @@
 <style>
 table#gblist tr:hover{
 	cursor: pointer;
-	background-color: #ddd;
+	background-color: #0072ff;
 
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+.jm-font{
+		font-family: 'Nanum Pen Script', cursive;
+		color: white;
+	}
+
+
 </style>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
@@ -24,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		// 가장 안쪽 tag (TD)의 이름을 가져와라
 		let tag_name = ev.target.tagName;
 		
-		if(tag_name = "TD"){
+		if(tag_name == "TD"){
 			let gb_seq = ev
 			.target
 			.closest("TR")
@@ -34,14 +42,85 @@ document.addEventListener("DOMContentLoaded", function(){
 		="${rootPath}/guest/view?gb_seq=" + gb_seq
 				
 		}
+	}) // table의 click
+	
+	// 방명록 쓰기 button click 시작
+	document.querySelector("button.btn_write")
+	.addEventListener("click",function(ev){
+	
+		// alret("방명록쓰기")
+		document.location.href = "${rootPath}/guest/insert"
+		
 	})
 	
-})
+	
+	
+	// 방명록 쓰기 button click end
+	
+}) // 전체
 
 </script>
+<style>
+
+	section#main{
+		width:80%;
+		margin:3px auto;
+		border:1px solid #00c6ff;
+		padding:5px;
+		
+		background-color: #00c6ff;
+		
+		/* rgba를 사용하는 대신 바탕색의 투명도를 지정 */
+		/* rgba(0,255,0,0.3) */
+		opacity: 0.7;
+	}
+	/* 
+	form tag는 block tag type 이기때문에
+	button tag와 한 라인에 배치하기 위하여
+	display type inline-block으로 변환하고
+	width를 제한하여 설정하였다 
+	*/
+	section#main form{
+		display: inline-block;
+		width:30%;
+		margin-left:20px;
+	}
+	
+	section#main input{
+		background-color: white;
+		padding:5px;
+		border-radius: 5px;
+		border:ipx solid #0072ff;
+		
+	}
+	
+	
+	section#main button{
+		
+		padding:5px;
+		outline:0;
+		border:0;
+		border-radius: 5px;
+		background-color: #0072ff;
+		color:white;
+		opacity: 1;
+	}
+	
+	section#main button:hover{
+		box-shadow: 2px 2px 2px rgba(0,0,0,0.3)
+	}
+
+</style>
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/include_nav.jsp" %>
+	<section id="main">
+		<form>
+		<input name="text">
+		</form>
+		<button class="btn_write">방명록 쓰기</button>
+		
+	</section>
 	<table id="gblist">
 		<tr>
 			<th>작성일</th>

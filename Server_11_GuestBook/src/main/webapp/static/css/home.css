@@ -10,7 +10,7 @@
 h1 {
 	color:white;
 	text-align:center;
-	background-color:rgba(147, 219, 235, 1);
+	background-color:#0072ff;
 	/*
 	HTML, CSS 에서의 단위구조
 	dp, sp, pt, px : 절대값으로 단위 지정하기
@@ -31,7 +31,7 @@ table{
 }
 
 td, th{
-	border:1px solid green;
+	border:1px solid #0072ff;
 	padding:5px;
 	text-align: center;
 	

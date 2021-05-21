@@ -1,8 +1,50 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+.jm-font{
+		font-family: 'Nanum Pen Script', cursive;
+		color: white;
+	}
+	*{
+	font-family: 'Nanum Pen Script', cursive;
+	font-size: 35px;
+	}
+
+/*
+	CSS를 사용하여 화면을 디자인할때
+	항상 제일먼저 있어야 할 설정
+*/
+*{
+
+	margin:0;
+	padding:0;
+	box-sizing: border-box;
+
+}
+
+h1.main {
+	color:white;
+	text-align:center;
+    background : linear-gradient( to right, #00c6ff, #0072ff);
+	/*
+	HTML, CSS 에서의 단위구조
+	dp, sp, pt, px : 절대값으로 단위 지정하기
+	
+	rem(em) : 상대값으로 단위 지정하기
+	내부에 Text 포함된 tag의 경우
+	text 높이를 1rem(em)으로 설정하고, 
+	비율에 맞춰서 상대적으로 크기를 지정하기
+	*/
+	padding:2rem;
+	font-size: 60px;
+}
+
+
+
 nav#main {
-	background-color: rgba(78, 196, 223, 1);
+	background : linear-gradient( to right, #F4E2D8, #BA5370);
 }
 /*
 	ul tag는 본문에서 보편적으로 list 등을 표현할때
@@ -22,7 +64,7 @@ nav#main {
 */
 nav#main ul {
 	margin: 0px;
-	background-color: rgba(78, 196, 223, 1);
+	background : linear-gradient( to left, #00c6ff, #0072ff);
 }
 
 nav#main li {
@@ -34,7 +76,7 @@ nav#main li {
 }
 
 nav#main li:hover {
-	background-color: gray;
+	background-color: #00c6ff;
 	color: black;
 	cursor: pointer;
 }
@@ -94,7 +136,7 @@ nav#main a {
 	})
 	
 </script>
-<h1>방명록 2021</h1>
+<h1 class="main">방명록 2021</h1>
 <%-- 메뉴를 설정할때 사용하는 tag --%>
 <%-- div라는 tag를 사용하여 layout을 설정했는데 
 	     HTML5에서는 Symatec(의미있는 이름으로) tag를
