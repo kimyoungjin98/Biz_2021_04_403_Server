@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 	<name>callor</name>
 
+	<!-- pom.xml에서 공통으로 사용할 변수 -->
 	<properties>
 		<java-version>15</java-version>
 
